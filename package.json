@@ -1,0 +1,15 @@
+{
+  "name": "bookmngapi",
+  "version": "1.0.0",
+  "description": "Here I have creat an API for managing the book and it's details.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dharmesh Gohil",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.9"
+  }
+}
