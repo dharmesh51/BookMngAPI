@@ -1,5 +1,8 @@
+require("dotenv").config();
 //Frame work
 const express = require('express');
+const mongoose = require('mongoose');
+
 
 //Import DataBase
 const database = require('./Database/indexData');
@@ -9,6 +12,18 @@ const BookStore = express();
 
 //Configuration
 BookStore.use(express.json());
+
+//Establish database connection
+console.log("hey i'm here");
+mongoose.connect(process.env.MONGO_URL,
+{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+
+}
+).then(() => console.log("connection successful!!!"));
 
 // ---------------------------------------------------------------------------------------
 // -------------------------------GET Method---------------------------------------------
