@@ -10,6 +10,6 @@ const PubSchema = mongoose.Schema({
 
 //Creating a publication model
 
-const PubModel = mongoose.model(PubSchema);
+const PubModel = mongoose.model("Publications", PubSchema);
 
 module.exports = PubModel;
