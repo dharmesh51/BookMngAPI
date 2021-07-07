@@ -81,12 +81,8 @@ const publications = [{
     id:3,
     name:"Plata Publishing",
     bookid:["103","104"]
-},
-{
-    id:4,
-    name:"My Publication",
-    bookid:[]
 }
+
 ];
 
 module.exports = {books,authors,publications};

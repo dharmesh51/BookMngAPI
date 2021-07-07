@@ -19,7 +19,6 @@ const BookStore = express();
 BookStore.use(express.json());
 
 //Establish database connection
-console.log("hey i'm here");
 mongoose.connect(process.env.MONGO_URL,
 {
     useNewUrlParser: true,
@@ -36,13 +35,14 @@ mongoose.connect(process.env.MONGO_URL,
 
 /*
 Route        --> /
-Description  --> get books or authors or publications
+Description  --> get books or authors or publications 
 Access       --> Public
 Prameters    --> None
 Method       --> Get
 */
-BookStore.get('/' , (req,res) => {
-res.json(database.authors);
+BookStore.get('/' , async (req,res) => {
+    const getallbooks = await Bookmodel.find();   //if U required author and pub then use it different model
+    return res.json(getallbooks);
 });
 
 /*
@@ -52,9 +52,13 @@ Access       --> Public
 Prameters    --> isbn
 Method       --> Get
 */
-BookStore.get('/id/:isbn' , (req,res)  => {
-    const getSpecificBook = database.books.filter((book) => book.ISBN === req.params.isbn);
-    if (getSpecificBook.length === 0) {
+BookStore.get('/id/:isbn' , async (req,res)  => {
+
+    const getSpecificBook = await Bookmodel.findOne({ISBN: req.params.isbn});
+
+    //const getSpecificBook = database.books.filter((book) => book.ISBN === req.params.isbn);
+    //if no data match mongoose gives null -->false
+    if (!getSpecificBook) {
         res.json({error:`No Book found for the ISBN of ${req.params.isbn}`});
     }
     res.json(getSpecificBook);
@@ -67,12 +71,13 @@ Access       --> Public
 Prameters    --> category
 Method       --> Get
 */
-BookStore.get('/c/:category' , (req, res) => {
-    const getBooks = database.books.filter((book) => book.Category.includes(req.params.category));
-    if (getBooks.length === 0) {
+BookStore.get('/c/:category' , async (req, res) => {
+    const getBooks = await Bookmodel.findOne({Category: req.params.category});
+    //const getBooks = database.books.filter((book) => book.Category.includes(req.params.category));
+    if (!getBooks) {
         res.json({error:`No Book found for Category of ${req.params.category}`});
     }
-    res.json({Book:getBooks});
+    return res.json(getBooks);
 });
 
 /*
@@ -82,13 +87,15 @@ Access       --> Public
 Prameters    --> authorid
 Method       --> Get
 */
-BookStore.get('/a/:authorid' , (req, res) => {
-    const IntAuthorID = parseInt(req.params.authorid);
-    const getBooks = database.books.filter((book) => book.Authors.includes(IntAuthorID));
-    if (getBooks.length === 0) {
-        res.json({error:`No Book found for Author of id ${req.params.authorid}`});
+BookStore.get('/a/:authorid' , async (req, res) => {
+
+    const getBooks = await Bookmodel.find({Authors: req.params.authorid});
+    // const IntAuthorID = parseInt(req.params.authorid);
+    // const getBooks = database.books.filter((book) => book.Authors.includes(IntAuthorID));
+    if (!getBooks) {
+        return res.json({error:`No Book found for Author of id ${req.params.authorid}`});
     }
-    res.json(getBooks);
+    return res.json({Book:getBooks});
 });
 
 
@@ -191,10 +198,11 @@ Access       --> Public
 Prameters    --> none
 Method       --> POST
 */
-BookStore.post('/book/new' , (req,res) => {
+BookStore.post('/book/new' , async (req,res) => {
     const { newBook } = req.body;
-    database.books.push(newBook);
-     res.json({Books:database.books,Message:"Book added successfuly."});
+    Bookmodel.create(newBook);
+   // database.books.push(newBook);
+     return res.json({Message:"Book added successfuly."});
 
 });
 
@@ -207,8 +215,10 @@ Method       --> POST
 */
 BookStore.post('/author/new' , (req,res) => {
     const { newAuthor } = req.body;
-    database.authors.push(newAuthor);
-     res.json({Authors:database.authors,Message:"Author added successfuly."});
+
+    Authormodel.create(newAuthor);
+    //database.authors.push(newAuthor);
+    return res.json({Message:"Author added successfuly."});
 
 });
 
@@ -222,8 +232,10 @@ Method       --> POST
 */
 BookStore.post('/publication/new' , (req,res) => {
     const { newPublication } = req.body;
-    database.publications.push(newPublication);
-     res.json({Publications:database.publications,Message:"Publication  added successfuly."});
+
+    Pubmodel.create(newPublication);
+    //database.publications.push(newPublication);
+     return res.json({Message:"Publication  added successfuly."});
 
 });
 
