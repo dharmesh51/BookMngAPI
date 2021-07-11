@@ -67,12 +67,15 @@ Access       --> Public
 Prameters    --> none
 Method       --> POST
 */
-Router.post('/new' , (req,res) => {
-    const { newPublication } = req.body;
-
-    Pubmodel.create(newPublication);
-    //database.publications.push(newPublication);
-     return res.json({Message:"Publication  added successfuly."});
+Router.post('/new' , async(req,res) => {
+    try {
+        const { newPublication } = req.body;
+        await Pubmodel.create(newPublication);
+        //database.publications.push(newPublication);
+        return res.json({Message:"Publication  added successfuly."});
+    } catch (err) {
+        return res.json({error:err.message});
+    }
 
 });
 

@@ -28,15 +28,14 @@ Prameters    --> isbn
 Method       --> Get
 */
 Router.get('/id/:isbn' , async (req,res)  => {
-
-    const getSpecificBook = await Bookmodel.findOne({ISBN: req.params.isbn});
-
-    //const getSpecificBook = database.books.filter((book) => book.ISBN === req.params.isbn);
-    //if no data match mongoose gives null -->false
-    if (!getSpecificBook) {
-        res.json({error:`No Book found for the ISBN of ${req.params.isbn}`});
-    }
-    res.json(getSpecificBook);
+    
+        const getSpecificBook = await Bookmodel.findOne({ISBN: req.params.isbn});
+        //const getSpecificBook = database.books.filter((book) => book.ISBN === req.params.isbn);
+        //if no data match mongoose gives null -->false
+        if (!getSpecificBook) {
+            return res.json({error:`No Book found for the ISBN of ${req.params.isbn}`});
+        }
+        return res.json(getSpecificBook);
 });
 
 /*
@@ -86,10 +85,18 @@ Prameters    --> none
 Method       --> POST
 */
 Router.post('/new' , async (req,res) => {
+
+  try {
     const { newBook } = req.body;
-    Bookmodel.create(newBook);
+    await Bookmodel.create(newBook);
    // database.books.push(newBook);
      return res.json({Message:"Book added successfuly."});
+  } catch (err) {
+      if (err.code == 11000) {
+          return res.json({error:"ISBN already exist"});
+      }
+      return res.json({error:err.message});
+  }
 
 });
 

@@ -3,8 +3,14 @@ const mongoose = require("mongoose");
 //Creating a publication schema
 
 const PubSchema = mongoose.Schema({
-    id:Number,
-    name:String,
+    id:{
+        type:Number,
+        required:true
+    },
+    name:{
+        type:String,
+        required:true
+    },
     bookid:[String],
 });
 

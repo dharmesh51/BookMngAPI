@@ -67,12 +67,15 @@ Access       --> Public
 Prameters    --> none
 Method       --> POST
 */
-Router.post('/new' , (req,res) => {
-    const { newAuthor } = req.body;
-
-    Authormodel.create(newAuthor);
-    //database.authors.push(newAuthor);
-    return res.json({Message:"Author added successfuly."});
+Router.post('/new' , async(req,res) => {
+    try {
+        const { newAuthor } = req.body;
+        await Authormodel.create(newAuthor);
+        //database.authors.push(newAuthor);
+        return res.json({Message:"Author added successfuly."});
+    } catch (err) {
+        return res.json({error:err.message});
+    }
 
 });
 
