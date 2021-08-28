@@ -3,13 +3,14 @@ require("dotenv").config();
 const express = require('express');
 const mongoose = require('mongoose');
 
-
 //Microservices Routes
 const BookRoute = require("./API/Book");
 const AuthorRoute = require("./API/Author");
 const PubRoute = require("./API/Publication");
 //Initializing express
 const BookStore = express();
+
+const Port = process.env.PORT || 5000 ;
 
 //Configuration
 BookStore.use(express.json());
@@ -32,5 +33,5 @@ BookStore.use("/author", AuthorRoute);
 BookStore.use("/publication", PubRoute);
 
 //Server listening
-BookStore.listen(5000, () => console.log("Server is Running"));
+BookStore.listen(Port, () => console.log("Server is Running"));
 
