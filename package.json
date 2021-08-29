@@ -4,7 +4,8 @@
   "description": "Here I have creat an API for managing the book and it's details.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "set NODE_ENV=development&& node index.js",
+    "start-prod": "set NODE_ENV=production&& node index.js"
   },
   "author": "Dharmesh Gohil",
   "license": "ISC",
@@ -13,5 +14,8 @@
     "express": "^4.17.1",
     "mongoose": "^5.13.2",
     "nodemon": "^2.0.11"
+  },
+  "engines": {
+    "node": "14.17.0"
   }
 }
