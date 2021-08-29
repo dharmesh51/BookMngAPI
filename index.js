@@ -2,7 +2,7 @@ require("dotenv").config();
 //Frame work
 const express = require('express');
 const mongoose = require('mongoose');
-mongoose.connect(config.DB,{ useNewUrlParser: true });
+
 
 //Microservices Routes
 const BookRoute = require("./API/Book");
